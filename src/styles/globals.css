@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import url("./Inter/inter.css");
  
 @layer base {
   :root {
@@ -71,6 +73,8 @@
     @apply border-border;
   }
   body {
+    font-family: "Inter";
+    font-weight: 500;
     @apply bg-background text-foreground;
   }
 }
