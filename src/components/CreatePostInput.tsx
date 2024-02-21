@@ -1,7 +1,7 @@
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { AutosizeTextarea } from "./ui/autosize-textarea";
 
 const CreatePostInput = () => {
   return (
@@ -14,7 +14,7 @@ const CreatePostInput = () => {
       </div>
       
       <div className="flex flex-grow flex-col">
-        <Textarea
+        <AutosizeTextarea
           placeholder={"Title of your post\nShare your thoughts with the world!"}
           className="resize-none rounded-none border-0 border-b border-gray-300 p-0 text-base focus-visible:border-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
         />

@@ -6,5 +6,5 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function sliceContent(content: string) {
-  return content.slice(0, 30);
+  return content.slice(0, 72);
 }
