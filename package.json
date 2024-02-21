@@ -9,7 +9,7 @@
     "db:studio": "prisma studio",
     "dev": "next dev",
     "postinstall": "prisma generate",
-    "lint": "eslint --ext .ts,.tsx src",
+    "lint": "eslint --ext .ts,.tsx src --ignore-pattern src/components/ui",
     "start": "next start",
     "prepare": "husky install"
   },

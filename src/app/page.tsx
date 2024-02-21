@@ -9,7 +9,6 @@ export default async function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center">
-      <div className="w-96 h-96 bg-primary"></div>
     </main>
   );
 }
