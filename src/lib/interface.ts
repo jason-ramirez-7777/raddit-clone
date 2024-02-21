@@ -1,12 +1,15 @@
-import React from "react";
-
 export interface IconProps {
   color?: string;
 }
 
-export interface NavbarConfig {
+export interface PostProps {
   id: number;
-  icon: (props: IconProps) => React.JSX.Element;
-  name: string;
-  path: string;
+  title: string;
+  content: string;
+  vote: number;
+  poster: {
+    name: string;
+    avatar: string;
+  }
+  date: Date;
 }
