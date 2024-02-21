@@ -7,11 +7,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import UpvoteIcon from "@/components/icons/UpvoteIcon";
 import DownvoteIcon from "@/components/icons/DownvoteIcon";
 import { PostProps, User } from "@/lib/interface";
-import { sliceContent } from "@/lib/utils";
+import { calculateAgeOfPost, sliceContent } from "@/lib/utils";
 import { users } from "@/lib/mockdata";
 
 const Post = (props: PostProps) => {
-  const { id, title, content, votes, authorId } = props;
+  const { id, title, content, votes, authorId, date } = props;
   const user = users.find((user: User) => user.id === authorId);
   const router = useRouter();
 
@@ -38,7 +38,7 @@ const Post = (props: PostProps) => {
             </Avatar>
 
             <p className="ml-2 text-sm text-gray-700">
-              Posted by {user?.name} 3 hours ago
+              Posted by {user?.name} {calculateAgeOfPost(date)}
             </p>
           </div>
 
