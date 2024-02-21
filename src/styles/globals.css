@@ -72,6 +72,20 @@
   * {
     @apply border-border;
   }
+
+  ::-webkit-scrollbar {
+    width: 7px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    border-radius: 9px;
+    background-color: gainsboro;
+  }
+  
+  ::-webkit-scrollbar-track {
+    width: 7px;
+  }
+
   body {
     font-family: "Inter";
     font-weight: 500;

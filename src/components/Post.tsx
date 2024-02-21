@@ -1,10 +1,20 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import React from "react";
 import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import UpvoteIcon from "@/components/icons/UpvoteIcon";
 import DownvoteIcon from "@/components/icons/DownvoteIcon";
+import { PostProps, User } from "@/lib/interface";
+import { calculateAgeOfPost, sliceContent } from "@/lib/utils";
+import { users } from "@/lib/mockdata";
 
-const Post = () => {
+const Post = (props: PostProps) => {
+  const { id, title, content, votes, authorId, date } = props;
+  const user = users.find((user: User) => user.id === authorId);
+  const router = useRouter();
+
   return (
     <div className="w-[600px]">
       <div className="flex w-full my-10">
@@ -13,7 +23,7 @@ const Post = () => {
             <UpvoteIcon color="black" />
           </button>
 
-          <p>105</p>
+          <p>{votes}</p>
 
           <button className="[&_path]:hover:stroke-primary">
             <DownvoteIcon color="black" />
@@ -23,16 +33,17 @@ const Post = () => {
         <div className="flex flex-col w-full ml-2 cursor-pointer">
           <div className="flex items-center">
             <Avatar className="w-6 h-6">
-              <AvatarImage src="https://github.com/shadcn.png" alt="shadcn" />
-              <AvatarFallback>PJ</AvatarFallback>
+              <AvatarImage src={user?.avatar} alt="shadcn" />
+              <AvatarFallback>P</AvatarFallback>
             </Avatar>
 
-            <p className="ml-2 text-sm text-gray-700">Posted by limerider 3 hours ago</p>
+            <p className="ml-2 text-sm text-gray-700">
+              Posted by {user?.name} {calculateAgeOfPost(date)}
+            </p>
           </div>
 
-          <h1 className="py-2 hover:text-primary">Honest opinions on Lime ebikes in London</h1>
-
-          <p className="text-sm text-gray-700">Tell me your good and bad experiences of using Lime as a Rider in London</p>
+          <h1 className="py-2 hover:text-primary" onClick={() => router.push(`/posts/${id}`)}>{title}</h1>
+          <p className="text-sm text-gray-700">{sliceContent(content)}</p>
         </div>
       </div>
 
