@@ -1,12 +1,33 @@
-import React from "react";
+export interface QueryProps {
+  params: {
+    id: number;
+  }
+}
 
 export interface IconProps {
   color?: string;
 }
 
-export interface NavbarConfig {
+export interface User {
   id: number;
-  icon: (props: IconProps) => React.JSX.Element;
   name: string;
-  path: string;
+  email: string;
+  avatar: string;
+}
+
+export interface PostProps {
+  id: number;
+  title: string;
+  content: string;
+  votes: number;
+  authorId: number;
+  children: Array<CommentProps>;
+}
+
+export interface CommentProps {
+  id: number;
+  content: string;
+  votes: number;
+  authorId: number;
+  children: Array<CommentProps>;
 }
