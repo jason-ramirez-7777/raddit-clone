@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import { Separator } from "@radix-ui/react-separator";
 import UpvoteIcon from "@/components/icons/UpvoteIcon";
 import DownvoteIcon from "@/components/icons/DownvoteIcon";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -9,8 +8,7 @@ import ReplyIcon from "./icons/ReplyIcon";
 
 const Comment = () => {
   return (
-    <div className="w-[600px] my-4">
-      <Separator className="w-full h-[1px] bg-gray-200 mb-6" />
+    <div className="w-full">
 
       <div className="flex w-full">
         <div className="flex flex-col w-full ml-2">

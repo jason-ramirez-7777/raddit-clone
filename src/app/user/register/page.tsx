@@ -1,5 +1,7 @@
-import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import React from "react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function LoginPage() {
   return (
@@ -8,6 +10,7 @@ export default function LoginPage() {
         <h1 className=" text-[28px] font-medium leading-10 mb-1">
           Join the best community ever
         </h1>
+
         <h2 className="text-[20px] font-normal leading-8 text-[#4B5563] ">
           Create an account today
         </h2>
@@ -16,13 +19,14 @@ export default function LoginPage() {
           className="flex justify-start rounded-xl border border-[#D1D5DB] p-5 my-7 h-12"
           variant="outline"
         >
-          <img
+          <Image
             alt="google chrome svg"
             src="/assets/google-svgrepo-com.svg"
             className="mr-3"
             width={26}
             height={26}
           />
+          
           <div className="text-base font-normal leading-4 text-[#374151]">
             Continue with Google
           </div>
@@ -32,12 +36,13 @@ export default function LoginPage() {
           <div className=" text-base leading-6 text-[#374151]">
             Already have an account?
           </div>
-          <Button
-            variant="link"
-            className="ml-1 p-0 text-base font-medium leading-4 text-[#172554]"
+          
+          <Link
+            href={"/user/login"}
+            className="ml-1 p-0 text-base font-medium leading-4 text-[#172554] hover:underline"
           >
-            Signin?
-          </Button>
+            Sign in
+          </Link>
         </div>
       </div>
     </main>
