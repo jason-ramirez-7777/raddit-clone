@@ -1,16 +1,14 @@
-// "use client";
-
 import { unstable_noStore as noStore } from "next/cache";
 import React from "react";
 
-import { Separator } from "@/components/ui/separator";
-import Sidebar from "@/components/Sidebar";
 import PostList from "@/components/PostList";
+import SidebarWrapper from "@/providers/SidebarWrapper";
 
 import { api } from "@/trpc/server";
 
 export default async function Home() {
   noStore();
+  // const hello = await api.post.hello.query({ text: "from tRPC" });
 
   // const user = api.user.auth.mutate({
   //   email: 'anthony.bartolotte.1010@gmail.com',
@@ -23,10 +21,8 @@ export default async function Home() {
   // console.log(user);
 
   return (
-    <main className="flex w-full min-h-screen">
-      <Sidebar />
-      <Separator orientation="vertical" className="h-screen" />
+    <SidebarWrapper>
       <PostList />
-    </main>
+    </SidebarWrapper>
   );
 }

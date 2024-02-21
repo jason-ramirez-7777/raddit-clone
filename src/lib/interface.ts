@@ -21,6 +21,7 @@ export interface PostProps {
   content: string;
   votes: number;
   authorId: number;
+  date: Date;
   children: Array<CommentProps>;
 }
 
@@ -29,5 +30,11 @@ export interface CommentProps {
   content: string;
   votes: number;
   authorId: number;
+  date: Date;
   children: Array<CommentProps>;
+}
+
+export interface UserState {
+  name: string;
+  email: string;
 }

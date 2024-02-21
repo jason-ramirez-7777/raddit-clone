@@ -1,7 +1,8 @@
 import React from "react";
-import "@/styles/globals.css";
-
+import { ClerkProvider } from "@clerk/nextjs";
 import { TRPCReactProvider } from "@/trpc/react";
+import StoreProvider from "@/providers/StoreProvider";
+import "@/styles/globals.css";
 
 export const metadata = {
   title: "Create T3 App",
@@ -9,11 +10,17 @@ export const metadata = {
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
+        <ClerkProvider>
+          <TRPCReactProvider>
+            <StoreProvider>
+              {children}
+            </StoreProvider>
+          </TRPCReactProvider>
+        </ClerkProvider>
       </body>
     </html>
   );

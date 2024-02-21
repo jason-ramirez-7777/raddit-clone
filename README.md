@@ -1,4 +1,5 @@
 # Es Engineering Assignment
+This is an reddit clone example of a Next.js app that uses [Clerk](https://clerk.com) for authentication and user management. 
 
 ## Tech Stack
 - React.js
@@ -14,13 +15,31 @@
 - shadcn/ui
 - Radix UI
 
-## How do I run this project ? 
+## Usage
 
-    1. Install
-        npm i -g pnpm
-        pnpm i
+Go to your https://clerk.com dashboard and click on `Developer->API Keys` to copy your keys. Create a file named `.env.local` and add the following:
 
-    2. Run
-        pnpm dev
+```
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=YOUR KEY
+CLERK_SECRET_KEY=YOUR KEY
+```
 
-You can see the perfect project on [https://localhost:3000](https://localhost:3000)
+Install the pnpm
+```bash
+npm i -g pnpm
+```
+
+Install the dependencies:
+
+```bash
+pnpm install
+```
+
+Run the development server:
+```bash
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+

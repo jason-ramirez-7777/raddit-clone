@@ -4,9 +4,10 @@ import UpvoteIcon from "@/components/icons/UpvoteIcon";
 import DownvoteIcon from "@/components/icons/DownvoteIcon";
 import { PostProps, User } from "@/lib/interface";
 import { users } from "@/lib/mockdata";
+import { calculateAgeOfPost } from "@/lib/utils";
 
 const PostDetail = (props: PostProps) => {
-  const { id, title, content, votes } = props;
+  const { id, title, content, votes, date } = props;
   const user = users.find((user: User) => user.id === id);
 
   return (
@@ -31,7 +32,9 @@ const PostDetail = (props: PostProps) => {
               <AvatarFallback>P</AvatarFallback>
             </Avatar>
 
-            <p className="ml-2 text-sm text-gray-700">Posted by {user?.name} 3 hours ago</p>
+            <p className="ml-2 text-sm text-gray-700">
+              Posted by {user?.name} {calculateAgeOfPost(date)}
+            </p>
           </div>
 
           <h1 className="py-2">{title}</h1>

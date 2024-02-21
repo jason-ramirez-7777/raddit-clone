@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import React from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { UserButton } from "@clerk/nextjs";
 import { Separator } from "@/components/ui/separator";
 import HomeIcon from "@/components/icons/HomeIcon";
 import LoginIcon from "@/components/icons/LoginIcon";
 import PostIcon from "@/components/icons/PostIcon";
 
-const Sidebar = () => {
+const Sidebar = async () => {
   // eslint-disable-next-line
   const [isAuth, setIsAuth] = React.useState(false);
 
@@ -36,11 +36,7 @@ const Sidebar = () => {
       </div>
 
       <div className="flex items-center p-2">
-        <Avatar className="w-8 h-8">
-          <AvatarImage src="https://github.com/shadcn.png" alt="shadcn" />
-          <AvatarFallback>PJ</AvatarFallback>
-        </Avatar>
-
+        <UserButton afterSignOutUrl="/" />
         <h1 className="ml-3">Christin Cook</h1>
       </div>
 

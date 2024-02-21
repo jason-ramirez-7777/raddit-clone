@@ -28,6 +28,7 @@ export const posts: PostProps[] = [
     content: "Tell me your good and bad experiences of using Lime as a Rider in London Tell me your good and bad experiences of using Lime as a Rider in LondonTell me your good and bad experiences of using Lime as a Rider in LondonTell me your good and bad experiences of using Lime as a Rider in LondonTell me your good and bad experiences of using Lime as a Rider in London",
     votes: 5,
     authorId: 1,
+    date: new Date("2024-02-14"),
     children: []
   },
   {
@@ -36,18 +37,21 @@ export const posts: PostProps[] = [
     content: "Tell me your good and bad experiences of using Lime as a Rider in London Tell me your good and bad experiences of using Lime as a Rider in LondonTell me your good and bad experiences of using Lime as a Rider in LondonTell me your good and bad experiences of using Lime as a Rider in LondonTell me your good and bad experiences of using Lime as a Rider in London",
     votes: -1,
     authorId: 3,
+    date: new Date("2024-02-09"),
     children: [
       {
         id: 1,
         content: "Tell me your good and bad experiences of using Lime as a Rider in London Hah You are aaldskf ja ldsfaj ldslfaksjdflkajsd lasdlfkaj sldkfjlk",
         votes: -1,
         authorId: 3,
+        date: new Date("2024-02-14"),
         children: [
           {
             id: 1,
             content: "I acknowledge. London Hah You are aaldskf ja ldsfaj ldslfaksjdflkajsd lasdlfkaj sldkfjlk",
             votes: 0,
             authorId: 1,
+            date: new Date("2024-02-15"),
             children: []
           },
           {
@@ -55,6 +59,7 @@ export const posts: PostProps[] = [
             content: "I disagree",
             votes: 2,
             authorId: 2,
+            date: new Date("2024-02-17"),
             children: []
           },
         ]
@@ -67,6 +72,7 @@ export const posts: PostProps[] = [
     content: "Tell me your good and bad experiences of using Lime as a Rider in London Tell me your good and bad experiences of using Lime as a Rider in LondonTell me your good and bad experiences of using Lime as a Rider in LondonTell me your good and bad experiences of using Lime as a Rider in LondonTell me your good and bad experiences of using Lime as a Rider in London",
     votes: 15,
     authorId: 2,
+    date: new Date("2024-02-21"),
     children: []
   },
   {
@@ -75,6 +81,7 @@ export const posts: PostProps[] = [
     content: "Tell me your good and bad experiences of using Lime as a Rider in London Tell me your good and bad experiences of using Lime as a Rider in LondonTell me your good and bad experiences of using Lime as a Rider in LondonTell me your good and bad experiences of using Lime as a Rider in LondonTell me your good and bad experiences of using Lime as a Rider in London",
     votes: 16,
     authorId: 3,
+    date: new Date("2024-02-14"),
     children: []
   },
 ];

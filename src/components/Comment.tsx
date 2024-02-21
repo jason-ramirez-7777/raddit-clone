@@ -8,12 +8,17 @@ import ReplyIcon from "@/components/icons/ReplyIcon";
 import ReplyInput from "@/components/ReplyInput";
 import { CommentProps, User } from "@/lib/interface";
 import { users } from "@/lib/mockdata";
+import { calculateAgeOfPost } from "@/lib/utils";
 
 const Comment = (props: CommentProps) => {
-  const { content, votes, authorId, children } = props;
+  const { content, votes, authorId, date, children } = props;
   const user = users.find((user: User) => user.id === authorId);
   const [isCommentOpen, setIsCommentOpen] = React.useState(false);
+
   const toggleCommentOpen = () => setIsCommentOpen(!isCommentOpen);
+  const upvoteComment = () => { };
+  const downvoteComment = () => { };
+  const postComment = () => { };
 
   return (
     <div className="w-full my-6">
@@ -26,7 +31,7 @@ const Comment = (props: CommentProps) => {
             </Avatar>
 
             <p className="ml-2 text-sm text-gray-700">
-              Posted by {user?.name} 3 hours ago
+              Posted by {user?.name} {calculateAgeOfPost(date)}
             </p>
           </div>
 
@@ -35,13 +40,13 @@ const Comment = (props: CommentProps) => {
       </div>
 
       <div className="flex items-center px-2">
-        <button className="[&_path]:hover:stroke-primary">
+        <button className="[&_path]:hover:stroke-primary" onClick={upvoteComment}>
           <UpvoteIcon color="black" />
         </button>
 
         <p className="px-2">{votes}</p>
 
-        <button className="[&_path]:hover:stroke-primary">
+        <button className="[&_path]:hover:stroke-primary" onClick={downvoteComment}>
           <DownvoteIcon color="black" />
         </button>
 
