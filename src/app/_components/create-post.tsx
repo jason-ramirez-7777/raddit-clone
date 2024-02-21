@@ -1,13 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import React from "react";
 
 import { api } from "@/trpc/react";
 
 export function CreatePost() {
   const router = useRouter();
-  const [name, setName] = useState("");
+  const [name, setName] = React.useState("");
 
   const createPost = api.post.create.useMutation({
     onSuccess: () => {

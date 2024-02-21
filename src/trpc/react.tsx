@@ -3,7 +3,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { loggerLink, unstable_httpBatchStreamLink } from "@trpc/client";
 import { createTRPCReact } from "@trpc/react-query";
-import { useState } from "react";
+import React from "react";
 
 import { type AppRouter } from "@/server/api/root";
 import { getUrl, transformer } from "./shared";
@@ -11,9 +11,9 @@ import { getUrl, transformer } from "./shared";
 export const api = createTRPCReact<AppRouter>();
 
 export function TRPCReactProvider(props: { children: React.ReactNode }) {
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = React.useState(() => new QueryClient());
 
-  const [trpcClient] = useState(() =>
+  const [trpcClient] = React.useState(() =>
     api.createClient({
       transformer,
       links: [
