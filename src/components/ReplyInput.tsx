@@ -1,15 +1,20 @@
+"use client";
+
 import React from "react";
+import { useClerk } from "@clerk/nextjs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
 import { Button } from "@/components/ui/button";
-import { AutosizeTextarea } from "./ui/autosize-textarea";
 
 const ReplyInput = () => {
+  const { user } = useClerk();
+
   return (
     <div className="my-4 flex w-full rounded-xl border border-[#E5E7EB] p-4 pb-3 shadow-md shadow-gray-100">
       <div className="mr-4 flex items-start justify-start">
         <Avatar className="w-6 h-6">
-          <AvatarImage src="https://github.com/shadcn.png" alt="Avatar" />
-          <AvatarFallback>CN</AvatarFallback>
+          <AvatarImage src={user?.imageUrl} />
+          <AvatarFallback>{user?.firstName?.slice(0, 1)}</AvatarFallback>
         </Avatar>
       </div>
 

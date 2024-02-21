@@ -1,14 +1,14 @@
-import { unstable_noStore as noStore } from "next/cache";
 import React from "react";
 
-import PostList from "@/components/PostList";
+import CreatePostInput from "@/components/CreatePostInput";
+import Post from "@/components/Post";
+import { PostProps } from "@/lib/interface";
 import SidebarWrapper from "@/providers/SidebarWrapper";
 
 import { api } from "@/trpc/server";
 
 export default async function Home() {
-  noStore();
-  // const hello = await api.post.hello.query({ text: "from tRPC" });
+  const posts = await api.post.getAll.query();
 
   // const user = api.user.auth.mutate({
   //   email: 'anthony.bartolotte.1010@gmail.com',
@@ -22,7 +22,15 @@ export default async function Home() {
 
   return (
     <SidebarWrapper>
-      <PostList />
+      <div className="flex flex-col w-[600px] py-12">
+        <CreatePostInput />
+
+        {/* {
+          posts.map((post: PostProps) => (
+            <Post key={post.id} {...post} />
+          ))
+        } */}
+      </div>
     </SidebarWrapper>
   );
 }

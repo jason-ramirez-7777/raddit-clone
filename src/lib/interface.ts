@@ -33,8 +33,3 @@ export interface CommentProps {
   date: Date;
   children: Array<CommentProps>;
 }
-
-export interface UserState {
-  name: string;
-  email: string;
-}

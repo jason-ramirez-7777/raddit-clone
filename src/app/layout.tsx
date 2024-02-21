@@ -1,6 +1,7 @@
 import React from "react";
-import { ClerkProvider } from "@clerk/nextjs";
+import { ClerkLoaded, ClerkLoading, ClerkProvider } from "@clerk/nextjs";
 import { TRPCReactProvider } from "@/trpc/react";
+import AuthProvider from "@/providers/AuthProvider";
 import StoreProvider from "@/providers/StoreProvider";
 import "@/styles/globals.css";
 
@@ -14,14 +15,24 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en">
       <body>
-        <ClerkProvider>
-          <TRPCReactProvider>
-            <StoreProvider>
-              {children}
-            </StoreProvider>
-          </TRPCReactProvider>
-        </ClerkProvider>
+        <TRPCReactProvider>
+          <StoreProvider>
+            <ClerkProvider>
+              <ClerkLoading>
+                <div className="flex justify-center items-center w-full h-screen">
+                  Loading...
+                </div>
+              </ClerkLoading>
+
+              <ClerkLoaded>
+                <AuthProvider>
+                  {children}
+                </AuthProvider>
+              </ClerkLoaded>
+            </ClerkProvider>
+          </StoreProvider>
+        </TRPCReactProvider>
       </body>
-    </html>
+    </html >
   );
 }
