@@ -5,16 +5,17 @@ import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
 export const userRouter = createTRPCRouter({
 
     auth: publicProcedure
-        .input(z.object({ email: z.string().email(), name: z.string().min(1), avatar: z.string().min(1) }))
+        .input(z.object({
+            id: z.string().min(1),
+            email: z.string().email(),
+            name: z.string().min(1),
+            avatar: z.string().min(1)
+        }))
         .mutation(async ({ ctx, input }) => {
-            const { email, name, avatar } = input;
+            const { id, email, name, avatar } = input;
             try {
                 // Check if user with the provided email already exists
-                const existingUser = await ctx.db.user.findUnique({
-                    where: {
-                        email
-                    }
-                });
+                const existingUser = await ctx.db.user.findUnique({ where: { id } });
 
                 // If user already exists, return an error
                 if (existingUser) {
@@ -23,11 +24,7 @@ export const userRouter = createTRPCRouter({
 
                 // If user doesn't exist, create a new user
                 const user = await ctx.db.user.create({
-                    data: {
-                        email,
-                        name,
-                        avatar
-                    }
+                    data: { id, email, name, avatar }
                 });
                 return user;
             } catch (error) {
@@ -37,15 +34,11 @@ export const userRouter = createTRPCRouter({
         }),
 
     get: publicProcedure
-        .input(z.object({ id: z.number() }))
+        .input(z.object({ id: z.string().min(1) }))
         .query(async ({ ctx, input }) => {
             const { id } = input;
             try {
-                const user = await ctx.db.user.findUnique({
-                    where: {
-                        id
-                    }
-                });
+                const user = await ctx.db.user.findUnique({ where: { id } });
                 if (!user) {
                     return { error: 'User not found' };
                 }
