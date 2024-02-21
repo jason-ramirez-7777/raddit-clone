@@ -36,7 +36,7 @@ const CreatePostInput = () => {
         />
 
         <div className="flex w-full justify-end ">
-          <Button className="mt-2 rounded-lg px-4 py-2 text-sm text-white">Post</Button>
+          <Button className="mt-2 rounded-lg px-4 py-2 text-sm text-white" onClick={() => createPost(null)}>Post</Button>
         </div>
       </div>
     </div>
@@ -48,8 +48,6 @@ interface Post {
   content: string;
 }
 
-export async function createPost(newPost: Post) {
-
-}
+export async function createPost(newPost: any) {}
 
 export default CreatePostInput;

@@ -2,7 +2,7 @@ import React from "react";
 import { ClerkLoaded, ClerkLoading, ClerkProvider } from "@clerk/nextjs";
 import { TRPCReactProvider } from "@/trpc/react";
 import AuthProvider from "@/providers/AuthProvider";
-import StoreProvider from "@/providers/StoreProvider";
+
 import "@/styles/globals.css";
 
 export const metadata = {
@@ -16,21 +16,19 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     <html lang="en">
       <body>
         <TRPCReactProvider>
-          <StoreProvider>
-            <ClerkProvider>
-              <ClerkLoading>
-                <div className="flex justify-center items-center w-full h-screen">
-                  Loading...
-                </div>
-              </ClerkLoading>
+          <ClerkProvider>
+            <ClerkLoading>
+              <div className="flex justify-center items-center w-full h-screen">
+                Loading...
+              </div>
+            </ClerkLoading>
 
-              <ClerkLoaded>
-                <AuthProvider>
-                  {children}
-                </AuthProvider>
-              </ClerkLoaded>
-            </ClerkProvider>
-          </StoreProvider>
+            <ClerkLoaded>
+              <AuthProvider>
+                {children}
+              </AuthProvider>
+            </ClerkLoaded>
+          </ClerkProvider>
         </TRPCReactProvider>
       </body>
     </html >
