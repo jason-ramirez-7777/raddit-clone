@@ -1,7 +1,9 @@
 import React from "react";
 
-export const ReplyInput = () => {
+const ReplyInput = () => {
   return (
     <div></div>
   );
 };
+
+export default ReplyInput;

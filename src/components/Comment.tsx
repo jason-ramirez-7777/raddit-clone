@@ -1,8 +1,10 @@
 import React from "react";
 
 
-export const Comment = () => {
+const Comment = () => {
   return (
     <div></div>
   );
 };
+
+export default Comment;
