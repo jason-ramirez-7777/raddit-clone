@@ -1,45 +1,51 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
+// Configuration for Prisma Client
 generator client {
-    provider        = "prisma-client-js"
-    previewFeatures = ["driverAdapters"]
+    provider        = "prisma-client-js" // Specifies the client library
+    previewFeatures = ["driverAdapters"] // Enables experimental features
 }
 
+// Configuration for the datasource (e.g., your database)
 datasource db {
-    provider          = "mysql"
-    url               = env("DATABASE_URL")
-    shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+    provider          = "mysql" // Specifies the database type
+    url               = env("DATABASE_URL") // Database connection string from environment variable
+    shadowDatabaseUrl = env("SHADOW_DATABASE_URL") // For Prisma Migrate to manage shadow database
 
-    // Do not use foreign keys (PlanetScale does not support them)
+    // Custom setting for databases without foreign key constraint support, like PlanetScale
     relationMode = "prisma"
 }
 
+// User model definition
 model User {
-    id        String   @unique
-    email     String   @unique
-    name      String
-    avatar    String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    id        String   @unique // Unique identifier for the user
+    email     String   @unique // User's email address, must be unique
+    name      String   // User's name
+    avatar    String   // URL to the user's avatar image
+    createdAt DateTime @default(now()) // Timestamp when the user was created
+    updatedAt DateTime @updatedAt // Timestamp when the user was last updated
 }
 
+// Post model definition
 model Post {
-    id        Int      @id @default(autoincrement())
-    title     String
-    content   String   @db.LongText
-    votes     Int
-    authorId  String
-    parentId  Int?
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+    id        Int      @id @default(autoincrement()) // Unique identifier for the post
+    title     String   // Title of the post
+    content   String   @db.LongText // Content of the post, using LongText for longer texts
+    votes     Int      // Number of votes for the post
+    authorId  String   // ID of the user who authored the post
+    parentId  Int?     // Optional ID of the parent post (for threaded comments or reposts)
+    createdAt DateTime @default(now()) // Timestamp when the post was created
+    updatedAt DateTime @updatedAt // Timestamp when the post was last updated
 }
 
+// Vote model definition
 model Vote {
-    id     Int    @id @default(autoincrement())
-    userId String
-    postId Int
-    score  Int
+    id     Int    @id @default(autoincrement()) // Unique identifier for the vote
+    userId String // ID of the user who voted
+    postId Int    // ID of the post that was voted on
+    score  Int    // Score of the vote (e.g., upvote = 1, downvote = -1)
 
+    // Ensures that each combination of postId and userId is unique
     @@unique([postId, userId], name: "voteId")
 }
