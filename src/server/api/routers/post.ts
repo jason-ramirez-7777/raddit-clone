@@ -35,7 +35,6 @@ const fetchVoteUsers = async (db: any, postId: number) => {
 }
 
 export const postRouter = createTRPCRouter({
-
   // Create a new post
   create: publicProcedure
     .input(z.object({
@@ -110,7 +109,7 @@ export const postRouter = createTRPCRouter({
       votes: z.number().optional()
     }))
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.post.update({
+      const updatedPost = await ctx.db.post.update({
         where: { id: input.id },
         data: {
           title: input.title,
@@ -118,6 +117,8 @@ export const postRouter = createTRPCRouter({
           votes: input.votes,
         },
       });
+
+      return updatedPost;
     }),
 
   // Delete a post

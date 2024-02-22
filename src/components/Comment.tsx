@@ -6,19 +6,39 @@ import DownvoteIcon from "@/components/icons/DownvoteIcon";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ReplyIcon from "@/components/icons/ReplyIcon";
 import ReplyInput from "@/components/ReplyInput";
-import { CommentProps, User } from "@/lib/interface";
-import { users } from "@/lib/mockdata";
+import { PostType } from "@/lib/interface";
 import { calculateAgeOfPost } from "@/lib/utils";
+import { api } from "@/trpc/react";
 
-const Comment = (props: CommentProps) => {
-  const { content, votes, authorId, date, children } = props;
-  const user = users.find((user: User) => user.id === authorId);
-  const [isCommentOpen, setIsCommentOpen] = React.useState(false);
+const Comment = (props: PostType) => {
+  const mutation = api.post.update.useMutation();
+
+  const [isCommentOpen, setIsCommentOpen] = React.useState(true);
+  const [postDetail, setPostDetail] = React.useState(props);
+  const { data: user }: any = api.user.get.useQuery({ id: postDetail.authorId });
+  const [localVotes, setLocalVotes] = React.useState(props.votes);
 
   const toggleCommentOpen = () => setIsCommentOpen(!isCommentOpen);
-  const upvoteComment = () => { };
-  const downvoteComment = () => { };
-  const postComment = () => { };
+
+  const upvoteComment = () => {
+    mutation.mutate({
+      ...props,
+      votes: localVotes + 1
+    });
+    setLocalVotes(localVotes + 1);
+  };
+
+  const downvoteComment = () => {
+    mutation.mutate({
+      ...props,
+      votes: localVotes - 1
+    });
+    setLocalVotes(localVotes - 1);
+  };
+
+  React.useEffect(() => {
+    toggleCommentOpen();
+  }, [postDetail]);
 
   return (
     <div className="w-full my-6">
@@ -31,11 +51,11 @@ const Comment = (props: CommentProps) => {
             </Avatar>
 
             <p className="ml-2 text-sm text-gray-700">
-              Posted by {user?.name} {calculateAgeOfPost(date)}
+              Posted by {user?.name} {calculateAgeOfPost(postDetail.createdAt)}
             </p>
           </div>
 
-          <p className="my-3 text-sm">{content}</p>
+          <p className="my-3 text-sm">{postDetail.content}</p>
         </div>
       </div>
 
@@ -44,7 +64,7 @@ const Comment = (props: CommentProps) => {
           <UpvoteIcon color="black" />
         </button>
 
-        <p className="px-2">{votes}</p>
+        <p className="px-2">{localVotes}</p>
 
         <button className="[&_path]:hover:stroke-primary" onClick={downvoteComment}>
           <DownvoteIcon color="black" />
@@ -56,10 +76,10 @@ const Comment = (props: CommentProps) => {
         </button>
       </div>
 
-      {isCommentOpen && <ReplyInput />}
+      {isCommentOpen && <ReplyInput post={postDetail} setter={setPostDetail} />}
 
       {
-        children.length > 0 && children.map((comment: CommentProps) => (
+        postDetail.children && postDetail.children.length > 0 && postDetail.children.map((comment: any) => (
           <div key={comment.id} className="pl-12">
             <Comment {...comment} />
           </div>

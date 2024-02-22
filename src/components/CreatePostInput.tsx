@@ -10,11 +10,14 @@ import { api } from "@/trpc/react";
 const CreatePostInput = ({ list, setter }: any) => {
   const [title, setTitle] = React.useState("");
   const [content, setContent] = React.useState("");
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const { user } = useClerk();
   const mutation = api.post.create.useMutation();
 
   const createPost = () => {
+    setIsLoading(true);
+
     mutation.mutate(
       {
         title,
@@ -26,9 +29,11 @@ const CreatePostInput = ({ list, setter }: any) => {
           setTitle("");
           setContent("");
           setter([newPost, ...list]);
+          setIsLoading(false);
         },
         onError: (error) => {
           console.error("Mutation Error", error);
+          setIsLoading(false);
         }
       }
     );
@@ -49,6 +54,7 @@ const CreatePostInput = ({ list, setter }: any) => {
           className="outline-none mb-2"
           value={title}
           onChange={({ target: { value } }) => setTitle(value)}
+          disabled={isLoading}
         />
 
         <AutosizeTextarea
@@ -56,10 +62,17 @@ const CreatePostInput = ({ list, setter }: any) => {
           className="resize-none rounded-none tracking-wide border-0 border-b border-gray-300 p-0 text-base focus-visible:border-gray-200 focus-visible:ring-0 focus-visible:ring-offset-0"
           value={content}
           onChange={({ target: { value } }) => setContent(value)}
+          disabled={isLoading}
         />
 
         <div className="flex w-full justify-end ">
-          <Button className="mt-2 rounded-lg px-4 py-2 text-sm text-white" onClick={createPost}>Post</Button>
+          <Button
+            className="mt-2 rounded-lg px-4 py-2 text-sm text-white"
+            onClick={createPost}
+            disabled={isLoading}
+          >
+            Post
+          </Button>
         </div>
       </div>
     </div>
