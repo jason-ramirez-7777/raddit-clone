@@ -34,3 +34,12 @@ model Post {
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
+
+model Vote {
+    id     Int    @id @default(autoincrement())
+    userId String
+    postId Int
+    score  Int
+
+    @@unique([postId, userId], name: "voteId")
+}
