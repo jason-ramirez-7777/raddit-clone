@@ -7,34 +7,21 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ReplyIcon from "@/components/icons/ReplyIcon";
 import ReplyInput from "@/components/ReplyInput";
 import { PostType } from "@/lib/interface";
-import { calculateAgeOfPost } from "@/lib/utils";
+import { calculateAgeOfPost, checkVoteStatus, unvotePost, votePost } from "@/lib/utils";
 import { api } from "@/trpc/react";
+import { useClerk } from "@clerk/nextjs";
 
 const Comment = (props: PostType) => {
-  const mutation = api.post.update.useMutation();
+  const mutation = api.post.votePost.useMutation();
 
   const [isCommentOpen, setIsCommentOpen] = React.useState(true);
   const [postDetail, setPostDetail] = React.useState(props);
-  const { data: user }: any = api.user.get.useQuery({ id: postDetail.authorId });
+  const { data: poster }: any = api.user.get.useQuery({ id: postDetail.authorId });
+  const { user } = useClerk();
   const [localVotes, setLocalVotes] = React.useState(props.votes);
+  const [localVoteUsers, setLocalVoteUsers] = React.useState(props.voteUsers || []);
 
   const toggleCommentOpen = () => setIsCommentOpen(!isCommentOpen);
-
-  const upvoteComment = () => {
-    mutation.mutate({
-      ...props,
-      votes: localVotes + 1
-    });
-    setLocalVotes(localVotes + 1);
-  };
-
-  const downvoteComment = () => {
-    mutation.mutate({
-      ...props,
-      votes: localVotes - 1
-    });
-    setLocalVotes(localVotes - 1);
-  };
 
   React.useEffect(() => {
     toggleCommentOpen();
@@ -47,12 +34,12 @@ const Comment = (props: PostType) => {
         <div className="flex flex-col w-full ml-2">
           <div className="flex items-center">
             <Avatar className="w-6 h-6">
-              <AvatarImage src={user?.avatar} alt="shadcn" />
+              <AvatarImage src={poster?.avatar} alt="shadcn" />
               <AvatarFallback>P</AvatarFallback>
             </Avatar>
 
             <p className="ml-2 text-sm text-gray-700">
-              Posted by {user?.name} {calculateAgeOfPost(postDetail.createdAt)}
+              Posted by {poster?.name} {calculateAgeOfPost(postDetail.createdAt)}
             </p>
           </div>
 
@@ -61,14 +48,14 @@ const Comment = (props: PostType) => {
       </div>
 
       <div className="flex items-center px-2">
-        <button className="[&_path]:hover:stroke-primary" onClick={upvoteComment}>
-          <UpvoteIcon color="black" />
+        <button className="[&_path]:hover:stroke-primary" onClick={() => votePost(mutation, postDetail.id, user!.id, localVotes, localVoteUsers, setLocalVotes, setLocalVoteUsers)}>
+          <UpvoteIcon color={checkVoteStatus(user!.id, localVoteUsers) === 1 ? "#4F46E5" : "black"} />
         </button>
 
         <p className="px-2">{localVotes}</p>
 
-        <button className="[&_path]:hover:stroke-primary" onClick={downvoteComment}>
-          <DownvoteIcon color="black" />
+        <button className="[&_path]:hover:stroke-primary" onClick={() => unvotePost(mutation, postDetail.id, user!.id, localVotes, localVoteUsers, setLocalVotes, setLocalVoteUsers)}>
+          <DownvoteIcon color={checkVoteStatus(user!.id, localVoteUsers) === 1 ? "#4F46E5" : "black"} />
         </button>
 
         <button onClick={toggleCommentOpen} className={`flex items-center ml-6 [&_path]:hover:stroke-primary hover:text-primary ${isCommentOpen && "text-primary [&_path]:stroke-primary"}`}>
