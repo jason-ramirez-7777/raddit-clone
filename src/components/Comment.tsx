@@ -6,26 +6,29 @@ import DownvoteIcon from "@/components/icons/DownvoteIcon";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ReplyIcon from "@/components/icons/ReplyIcon";
 import ReplyInput from "@/components/ReplyInput";
-import { PostType } from "@/lib/interface";
-import { calculateAgeOfPost, checkVoteStatus, unvotePost, votePost } from "@/lib/utils";
+import { PostProps } from "@/lib/interface";
+import { calculateAgeOfPost, checkVoteStatus, devotePost, votePost } from "@/lib/utils";
 import { api } from "@/trpc/react";
 import { useClerk } from "@clerk/nextjs";
 
-const Comment = (props: PostType) => {
-  const mutation = api.post.votePost.useMutation();
+// Functional component Comment which takes PostType props
+const Comment = (props: PostProps) => {
+  const mutation = api.post.votePost.useMutation(); // Mutation for voting on a post
 
-  const [isCommentOpen, setIsCommentOpen] = React.useState(true);
-  const [postDetail, setPostDetail] = React.useState(props);
-  const { data: poster }: any = api.user.get.useQuery({ id: postDetail.authorId });
-  const { user } = useClerk();
-  const [localVotes, setLocalVotes] = React.useState(props.votes);
-  const [localVoteUsers, setLocalVoteUsers] = React.useState(props.voteUsers || []);
+  // State variables
+  const [isCommentOpen, setIsCommentOpen] = React.useState(true); // Tracking if the comment is open or closed
+  const [postDetail, setPostDetail] = React.useState(props); // Holding post details
+  const { data: poster }: any = api.user.get.useQuery({ id: postDetail.authorId }); // Fetching user data for the author of the post
+  const { user } = useClerk(); // Using Clerk hook to get the current user
+  const [localVotes, setLocalVotes] = React.useState(props.votes); // Local storing the number of votes
+  const [localVoteUsers, setLocalVoteUsers] = React.useState(props.voteUsers || []); // Local storing users who voted on the post
 
+  // Function to toggle comment open/close state
   const toggleCommentOpen = () => setIsCommentOpen(!isCommentOpen);
 
+  // Effect to toggle comment open/close when postDetail changes
   React.useEffect(() => {
     toggleCommentOpen();
-    console.log(postDetail);
   }, [postDetail]);
 
   return (
@@ -38,23 +41,23 @@ const Comment = (props: PostType) => {
               <AvatarFallback>P</AvatarFallback>
             </Avatar>
 
-            <p className="ml-2 text-sm text-gray-700">
+            <p className="ml-2 text-sm text-gray-700"> {/* Author name and post age */}
               Posted by {poster?.name} {calculateAgeOfPost(postDetail.createdAt)}
             </p>
           </div>
 
-          <p className="my-3 text-sm">{postDetail.content}</p>
+          <p className="my-3 text-sm">{postDetail.content}</p> {/* Post content */}
         </div>
       </div>
 
-      <div className="flex items-center px-2">
+      <div className="flex items-center px-2"> {/* Flex container for voting and reply */}
         <button className="[&_path]:hover:stroke-primary" onClick={() => votePost(mutation, postDetail.id, user!.id, localVotes, localVoteUsers, setLocalVotes, setLocalVoteUsers)}>
           <UpvoteIcon color={checkVoteStatus(user!.id, localVoteUsers) === 1 ? "#4F46E5" : "black"} />
         </button>
 
-        <p className="px-2">{localVotes}</p>
+        <p className="px-2">{localVotes}</p> {/* Display number of votes */}
 
-        <button className="[&_path]:hover:stroke-primary" onClick={() => unvotePost(mutation, postDetail.id, user!.id, localVotes, localVoteUsers, setLocalVotes, setLocalVoteUsers)}>
+        <button className="[&_path]:hover:stroke-primary" onClick={() => devotePost(mutation, postDetail.id, user!.id, localVotes, localVoteUsers, setLocalVotes, setLocalVoteUsers)}>
           <DownvoteIcon color={checkVoteStatus(user!.id, localVoteUsers) === -1 ? "#4F46E5" : "black"} />
         </button>
 
@@ -64,12 +67,12 @@ const Comment = (props: PostType) => {
         </button>
       </div>
 
-      {isCommentOpen && <ReplyInput post={postDetail} setter={setPostDetail} />}
+      {isCommentOpen && <ReplyInput post={postDetail} setter={setPostDetail} />} {/* Display reply input if comment is open */}
 
       {
         postDetail.children && postDetail.children.length > 0 && postDetail.children.map((comment: any) => (
           <div key={comment.id} className="pl-12">
-            <Comment {...comment} />
+            <Comment {...comment} /> {/* Render nested comment recursively */}
           </div>
         ))
       }
@@ -77,4 +80,4 @@ const Comment = (props: PostType) => {
   );
 };
 
-export default Comment;
+export default Comment; // Export Comment component

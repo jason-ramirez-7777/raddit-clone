@@ -1,43 +1,54 @@
-"use client";
+"use client"; 
 
 import React from "react";
 import { useClerk } from "@clerk/nextjs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { AutosizeTextAreaRef, AutosizeTextarea } from "@/components/ui/autosize-textarea";
+import { Button } from "@/components/ui/button";
 import { api } from "@/trpc/react";
 
+// Functional component for creating a new post input
 const CreatePostInput = ({ list, setter }: any) => {
+  // State variables for title, content, and loading state
   const [title, setTitle] = React.useState("");
   const [content, setContent] = React.useState("");
-  const textAreaRef = React.useRef<AutosizeTextAreaRef>(null);
   const [isLoading, setIsLoading] = React.useState(false);
-
+  // Ref for the textarea component
+  const textAreaRef = React.useRef<AutosizeTextAreaRef>(null);
+  // Clerk authentication hook to get user data
   const { user } = useClerk();
+  
+  // TRPC mutation hook for creating a new post
   const mutation = api.post.create.useMutation();
 
+  // Function to handle post creation
   const createPost = () => {
-    setIsLoading(true);
-
+    setIsLoading(true); // Set loading state to true
+    
+    // Call the mutation function to create the post
     mutation.mutate(
       {
         title,
         content,
-        authorId: user?.id || ""
+        authorId: user?.id || "" // Assign authorId as the current user's id or an empty string
       },
       {
+        // On successful creation
         onSuccess: (newPost) => {
           setTitle("");
           setContent("");
+          // Reset textarea height
           if (textAreaRef.current) {
             textAreaRef.current.textArea.style.height = "55px";
           }
+          // Add the new post to the list
           setter([newPost, ...list ? list : []]);
-          setIsLoading(false);
+          setIsLoading(false); // Set loading state to false
         },
+        // On error during creation
         onError: (error) => {
-          console.error("Mutation Error", error);
-          setIsLoading(false);
+          console.error("Mutation Error", error); // Log the error
+          setIsLoading(false); // Set loading state to false
         }
       }
     );

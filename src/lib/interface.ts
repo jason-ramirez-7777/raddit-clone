@@ -1,15 +1,5 @@
-export interface QueryProps {
-  params: {
-    id: number;
-  }
-}
-
 export interface IconProps {
   color?: string;
-}
-
-export interface LoaderProps {
-  size: number;
 }
 
 export interface User {
@@ -28,7 +18,7 @@ export interface Vote {
   userId: string;
 }
 
-export interface PostType {
+export interface PostProps {
   id: number;
   title: string;
   content: string;
@@ -36,16 +26,7 @@ export interface PostType {
   voteUsers: Array<Vote>;
   authorId: string;
   parentId?: string;
-  children?: Array<CommentProps>;
+  children?: Array<PostProps>;
   createdAt: Date;
   updatedAt: Date;
-}
-
-export interface CommentProps {
-  id: number;
-  content: string;
-  votes: number;
-  authorId: number;
-  date: Date;
-  children: Array<CommentProps>;
 }
