@@ -13,20 +13,38 @@ import { api } from "@/trpc/react";
 const Post = (props: PostType) => {
   const { id, title, content, votes, authorId, createdAt } = props;
   const router = useRouter();
-
+  const mutation = api.post.update.useMutation();
   const { data: user }: any = api.user.get.useQuery({ id: authorId });
+
+  const [localVotes, setLocalVotes] = React.useState(votes);
+
+  const upvotePost = () => {
+    mutation.mutate({
+      ...props,
+      votes: localVotes + 1
+    });
+    setLocalVotes(localVotes + 1);
+  };
+
+  const downvotePost = () => {
+    mutation.mutate({
+      ...props,
+      votes: localVotes - 1
+    });
+    setLocalVotes(localVotes - 1);
+  };
 
   return (
     <div className="w-[600px]">
       <div className="flex w-full my-10">
         <div className="flex flex-col justify-between items-center h-20 mx-2">
-          <button className="[&_path]:hover:stroke-primary">
+          <button className="[&_path]:hover:stroke-primary" onClick={upvotePost}>
             <UpvoteIcon color="black" />
           </button>
 
-          <p>{votes}</p>
+          <p>{localVotes}</p>
 
-          <button className="[&_path]:hover:stroke-primary">
+          <button className="[&_path]:hover:stroke-primary" onClick={downvotePost}>
             <DownvoteIcon color="black" />
           </button>
         </div>
@@ -35,7 +53,7 @@ const Post = (props: PostType) => {
           <div className="flex items-center">
             <Avatar className="w-6 h-6">
               <AvatarImage src={user?.avatar} alt="shadcn" />
-              <AvatarFallback>P</AvatarFallback>
+              <AvatarFallback>{user?.name.slice(0, 1)}</AvatarFallback>
             </Avatar>
 
             <p className="ml-2 text-sm text-gray-700">
