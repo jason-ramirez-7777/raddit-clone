@@ -58,6 +58,7 @@ const CreatePostInput = ({ list, setter }: any) => {
         />
 
         <AutosizeTextarea
+          maxHeight={256}
           placeholder="Share your thoughts with the world!"
           className="resize-none rounded-none tracking-wide border-0 border-b border-gray-300 p-0 text-base focus-visible:border-gray-200 focus-visible:ring-0 focus-visible:ring-offset-0"
           value={content}

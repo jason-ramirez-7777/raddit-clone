@@ -18,7 +18,7 @@ export default function Home() {
 
   return (
     <SidebarWrapper>
-      <div className="flex flex-col w-[600px] py-12">
+      <div className="flex flex-col w-full px-4 md:px-0 md:w-[600px] py-12">
         <CreatePostInput list={postList} setter={setPostList} />
 
         {
