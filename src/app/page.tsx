@@ -22,9 +22,11 @@ export default function Home() {
         <CreatePostInput list={postList} setter={setPostList} />
 
         {
-          postList && postList.map((post: PostType) => (
+          postList?.length > 0 ? postList.map((post: PostType) => post.id && (
             <Post key={post.id} {...post} />
-          ))
+          )) : (
+            <p className="w-full p-4 text-center text-xl text-gray-400">No Posts</p>
+          )
         }
       </div>
     </SidebarWrapper>

@@ -32,5 +32,6 @@ CREATE TABLE `Vote` (
     `postId` INTEGER NOT NULL,
     `score` INTEGER NOT NULL,
 
+    UNIQUE INDEX `Vote_postId_userId_key`(`postId`, `userId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;

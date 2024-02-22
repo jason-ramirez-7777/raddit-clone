@@ -26,6 +26,7 @@ const ReplyInput = ({ post, setter }: any) => {
       },
       {
         onSuccess: (data) => {
+          console.log("Created Reply", data);
           setter({ ...post, children: [...post.children, data] });
           setContent("");
           setIsLoading(false);

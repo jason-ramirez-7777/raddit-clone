@@ -1,11 +1,11 @@
-# Es Engineering Assignment
-This is an reddit clone example of a Next.js app that uses [Clerk](https://clerk.com) for authentication and user management. 
+# ES Engineering Assignment
+This is an reddit cloned example of a Next.js app that uses [Clerk](https://clerk.com) for authentication and user management. 
 
 ## Tech Stack
 - React.js
 - Node.js
 - T3
-- Next.js
+- Next.js 14
 - Next.js App Router
 - tRPC
 - Prisma

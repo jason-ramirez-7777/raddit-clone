@@ -9,7 +9,7 @@ export interface IconProps {
 }
 
 export interface User {
-  id: number;
+  id: string;
   name: string;
   email: string;
   avatar: string;
@@ -17,11 +17,19 @@ export interface User {
   updatedAt: Date;
 }
 
+export interface Vote {
+  id: number;
+  postId: number;
+  score: number;
+  userId: string;
+}
+
 export interface PostType {
   id: number;
   title: string;
   content: string;
   votes: number;
+  voteUsers: Array<Vote>;
   authorId: string;
   parentId?: string;
   children?: Array<CommentProps>;

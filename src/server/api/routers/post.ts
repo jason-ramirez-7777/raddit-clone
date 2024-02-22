@@ -54,7 +54,7 @@ export const postRouter = createTRPCRouter({
         },
       });
 
-      return post;
+      return { ...post, children: [] };
     }),
 
   // Fetch all posts
@@ -66,9 +66,9 @@ export const postRouter = createTRPCRouter({
             parentId: null // Fetch only top-level posts
           }
         });
-        const postsWithVoteUsers = posts.map(async (post) => ({
-          ...post,
-          voteUsers: await fetchVoteUsers(ctx.db, post.id)
+        const postsWithVoteUsers = await Promise.all(posts.map(async (post) => {
+          const voteUsers = await fetchVoteUsers(ctx.db, post.id);
+          return { ...post, voteUsers };
         }));
         return postsWithVoteUsers.reverse();
       } catch (error) {
@@ -159,11 +159,11 @@ export const postRouter = createTRPCRouter({
               tx.post.update({ where: { id }, data: { votes: updatedPostVotes } }),
               tx.vote.update({ where: { id: vote.id }, data: { score } })
             ]);
-            return { message: 'Vetoed successfully.' };
+            return { message: 'Voted successfully.' };
           } else {
             await Promise.all([
               tx.post.update({ where: { id }, data: { votes: { increment: score } } }),
-              await tx.vote.create({ data: { userId: user.id, postId: post.id, score } })
+              tx.vote.create({ data: { userId: user.id, postId: post.id, score } })
             ]);
             return { message: 'Voted successfully.' };
           }

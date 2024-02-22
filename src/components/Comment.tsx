@@ -38,6 +38,7 @@ const Comment = (props: PostType) => {
 
   React.useEffect(() => {
     toggleCommentOpen();
+    console.log(postDetail);
   }, [postDetail]);
 
   return (
