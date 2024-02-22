@@ -19,7 +19,7 @@ const PostDetail = (props: PostType) => {
   const [localVoteUsers, setLocalVoteUsers] = React.useState(voteUsers || []);
 
   return (
-    <div className="w-[600px]">
+    <div className="w-full px-4 md:px-0 md:w-[600px]">
       <div className="flex w-full my-2">
         <div className="flex flex-col justify-between items-center h-24 mx-2">
           <button className="[&_path]:hover:stroke-primary" onClick={() => votePost(mutation, id, user!.id, localVotes, localVoteUsers, setLocalVotes, setLocalVoteUsers)}>

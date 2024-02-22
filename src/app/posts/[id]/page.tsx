@@ -21,32 +21,38 @@ export default function PostPage(props: QueryProps) {
     setPostDetail(post);
   }, [post]);
 
-  return postDetail !== undefined ? (
+  return (
     <SidebarWrapper>
-      <div className="flex flex-col items-end w-[600px]">
-        <div className="w-full px-2 py-6">
-          <Link href={"/"} className="flex items-center hover:text-primary [&_path]:hover:stroke-primary">
-            <BackIcon color="black" />
-            <p className="ml-4">Back to posts</p>
-          </Link>
-        </div>
+      {
+        (post === undefined || post?.error) ? (
+          <h1 className="p-12 text-2xl">Post Not Found</h1>
+        ) : (
+          <div className="flex flex-col items-end w-full px-4 md:px-0 md:w-[600px]">
+            <div className="w-full px-2 py-6">
+              <Link href={"/"} className="flex items-center hover:text-primary [&_path]:hover:stroke-primary">
+                <BackIcon color="black" />
+                <p className="ml-4">Back to posts</p>
+              </Link>
+            </div>
 
-        <PostDetail {...postDetail} />
-        <ReplyInput post={postDetail} setter={setPostDetail} />
+            <PostDetail {...postDetail} />
+            <ReplyInput post={postDetail} setter={setPostDetail} />
 
-        <h1 className="w-full px-2 mt-8 mb-4">All comments</h1>
-        <Separator className="w-full h-[1px] bg-gray-200" />
+            <h1 className="w-full px-2 mt-8 mb-4">All comments</h1>
+            <Separator className="w-full h-[1px] bg-gray-200" />
 
-        {
-          postDetail.children && postDetail.children.length > 0 ? postDetail.children.map((comment: any) => (
-            <Comment key={comment.id} {...comment} />
-          )) : (
-            <p className="w-full p-2 text-gray-400">No comments for this post</p>
-          )
-        }
-      </div>
+            <div className="w-full pb-16">
+              {
+                postDetail.children && postDetail.children.length > 0 ? postDetail.children.map((comment: any) => (
+                  <Comment key={comment.id} {...comment} />
+                )) : (
+                  <p className="w-full p-2 text-gray-400">No comments for this post</p>
+                )
+              }
+            </div>
+          </div>
+        )
+      }
     </SidebarWrapper>
-  ) : (
-    <React.Fragment></React.Fragment>
   );
 }
