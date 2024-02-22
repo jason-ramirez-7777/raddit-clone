@@ -6,19 +6,30 @@ import DownvoteIcon from "@/components/icons/DownvoteIcon";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import ReplyIcon from "@/components/icons/ReplyIcon";
 import ReplyInput from "@/components/ReplyInput";
-import { CommentProps, User } from "@/lib/interface";
-import { users } from "@/lib/mockdata";
-import { calculateAgeOfPost } from "@/lib/utils";
+import { PostProps } from "@/lib/interface";
+import { calculateAgeOfPost, checkVoteStatus, devotePost, votePost } from "@/lib/utils";
+import { api } from "@/trpc/react";
+import { useClerk } from "@clerk/nextjs";
 
-const Comment = (props: CommentProps) => {
-  const { content, votes, authorId, date, children } = props;
-  const user = users.find((user: User) => user.id === authorId);
-  const [isCommentOpen, setIsCommentOpen] = React.useState(false);
+// Functional component Comment which takes PostType props
+const Comment = (props: PostProps) => {
+  const mutation = api.post.votePost.useMutation(); // Mutation for voting on a post
 
+  // State variables
+  const [isCommentOpen, setIsCommentOpen] = React.useState(true); // Tracking if the comment is open or closed
+  const [postDetail, setPostDetail] = React.useState(props); // Holding post details
+  const { data: poster }: any = api.user.get.useQuery({ id: postDetail.authorId }); // Fetching user data for the author of the post
+  const { user } = useClerk(); // Using Clerk hook to get the current user
+  const [localVotes, setLocalVotes] = React.useState(props.votes); // Local storing the number of votes
+  const [localVoteUsers, setLocalVoteUsers] = React.useState(props.voteUsers || []); // Local storing users who voted on the post
+
+  // Function to toggle comment open/close state
   const toggleCommentOpen = () => setIsCommentOpen(!isCommentOpen);
-  const upvoteComment = () => { };
-  const downvoteComment = () => { };
-  const postComment = () => { };
+
+  // Effect to toggle comment open/close when postDetail changes
+  React.useEffect(() => {
+    toggleCommentOpen();
+  }, [postDetail]);
 
   return (
     <div className="w-full my-6">
@@ -26,28 +37,28 @@ const Comment = (props: CommentProps) => {
         <div className="flex flex-col w-full ml-2">
           <div className="flex items-center">
             <Avatar className="w-6 h-6">
-              <AvatarImage src={user?.avatar} alt="shadcn" />
+              <AvatarImage src={poster?.avatar} alt="shadcn" />
               <AvatarFallback>P</AvatarFallback>
             </Avatar>
 
-            <p className="ml-2 text-sm text-gray-700">
-              Posted by {user?.name} {calculateAgeOfPost(date)}
+            <p className="ml-2 text-sm text-gray-700"> {/* Author name and post age */}
+              Posted by {poster?.name} {calculateAgeOfPost(postDetail.createdAt)}
             </p>
           </div>
 
-          <p className="my-3 text-sm">{content}</p>
+          <p className="my-3 text-sm">{postDetail.content}</p> {/* Post content */}
         </div>
       </div>
 
-      <div className="flex items-center px-2">
-        <button className="[&_path]:hover:stroke-primary" onClick={upvoteComment}>
-          <UpvoteIcon color="black" />
+      <div className="flex items-center px-2"> {/* Flex container for voting and reply */}
+        <button className="[&_path]:hover:stroke-primary" onClick={() => votePost(mutation, postDetail.id, user!.id, localVotes, localVoteUsers, setLocalVotes, setLocalVoteUsers)}>
+          <UpvoteIcon color={checkVoteStatus(user!.id, localVoteUsers) === 1 ? "#4F46E5" : "black"} />
         </button>
 
-        <p className="px-2">{votes}</p>
+        <p className="px-2">{localVotes}</p> {/* Display number of votes */}
 
-        <button className="[&_path]:hover:stroke-primary" onClick={downvoteComment}>
-          <DownvoteIcon color="black" />
+        <button className="[&_path]:hover:stroke-primary" onClick={() => devotePost(mutation, postDetail.id, user!.id, localVotes, localVoteUsers, setLocalVotes, setLocalVoteUsers)}>
+          <DownvoteIcon color={checkVoteStatus(user!.id, localVoteUsers) === -1 ? "#4F46E5" : "black"} />
         </button>
 
         <button onClick={toggleCommentOpen} className={`flex items-center ml-6 [&_path]:hover:stroke-primary hover:text-primary ${isCommentOpen && "text-primary [&_path]:stroke-primary"}`}>
@@ -56,12 +67,12 @@ const Comment = (props: CommentProps) => {
         </button>
       </div>
 
-      {isCommentOpen && <ReplyInput />}
+      {isCommentOpen && <ReplyInput post={postDetail} setter={setPostDetail} />} {/* Display reply input if comment is open */}
 
       {
-        children.length > 0 && children.map((comment: CommentProps) => (
+        postDetail.children && postDetail.children.length > 0 && postDetail.children.map((comment: any) => (
           <div key={comment.id} className="pl-12">
-            <Comment {...comment} />
+            <Comment {...comment} /> {/* Render nested comment recursively */}
           </div>
         ))
       }
@@ -69,4 +80,4 @@ const Comment = (props: CommentProps) => {
   );
 };
 
-export default Comment;
+export default Comment; // Export Comment component

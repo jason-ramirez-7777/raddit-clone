@@ -1,18 +1,21 @@
-export interface QueryProps {
-  params: {
-    id: number;
-  }
-}
-
 export interface IconProps {
   color?: string;
 }
 
 export interface User {
-  id: number;
+  id: string;
   name: string;
   email: string;
   avatar: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Vote {
+  id: number;
+  postId: number;
+  score: number;
+  userId: string;
 }
 
 export interface PostProps {
@@ -20,21 +23,10 @@ export interface PostProps {
   title: string;
   content: string;
   votes: number;
-  authorId: number;
-  date: Date;
-  children: Array<CommentProps>;
-}
-
-export interface CommentProps {
-  id: number;
-  content: string;
-  votes: number;
-  authorId: number;
-  date: Date;
-  children: Array<CommentProps>;
-}
-
-export interface UserState {
-  name: string;
-  email: string;
+  voteUsers: Array<Vote>;
+  authorId: string;
+  parentId?: string;
+  children?: Array<PostProps>;
+  createdAt: Date;
+  updatedAt: Date;
 }

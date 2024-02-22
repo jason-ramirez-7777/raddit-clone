@@ -42,11 +42,15 @@ pnpm dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## Technologies
+=======
+# ES Engineering Assignment
+This is an reddit cloned example of a Next.js app that uses [Clerk](https://clerk.com) for authentication and user management. 
+>>>>>>> fddaf180fafba0e952ea0b0e2c09edb47ffeafcb
 
 - React.js
 - Node.js
 - T3
-- Next.js
+- Next.js 14
 - Next.js App Router
 - tRPC
 - Prisma
