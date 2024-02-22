@@ -15,7 +15,7 @@ CREATE TABLE `User` (
 CREATE TABLE `Post` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `title` VARCHAR(191) NOT NULL,
-    `content` VARCHAR(191) NOT NULL,
+    `content` LONGTEXT NOT NULL,
     `votes` INTEGER NOT NULL,
     `authorId` VARCHAR(191) NOT NULL,
     `parentId` INTEGER NULL,
