@@ -19,7 +19,7 @@ export async function registerUser(requestData: any) {
 }
 
 export function sliceContent(content: string) {
-  return `${content.slice(0, 72)}...`;
+  return content.length > 72 ? `${content.slice(0, 72)}...` : content;
 }
 
 export function calculateAgeOfPost(postDate: Date) {

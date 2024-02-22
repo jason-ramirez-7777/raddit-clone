@@ -4,12 +4,13 @@ import React from "react";
 import { useClerk } from "@clerk/nextjs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
+import { AutosizeTextAreaRef, AutosizeTextarea } from "@/components/ui/autosize-textarea";
 import { api } from "@/trpc/react";
 
 const CreatePostInput = ({ list, setter }: any) => {
   const [title, setTitle] = React.useState("");
   const [content, setContent] = React.useState("");
+  const textAreaRef = React.useRef<AutosizeTextAreaRef>(null);
   const [isLoading, setIsLoading] = React.useState(false);
 
   const { user } = useClerk();
@@ -28,7 +29,10 @@ const CreatePostInput = ({ list, setter }: any) => {
         onSuccess: (newPost) => {
           setTitle("");
           setContent("");
-          setter([newPost, ...list]);
+          if (textAreaRef.current) {
+            textAreaRef.current.textArea.style.height = "55px";
+          }
+          setter([newPost, ...list ? list : []]);
           setIsLoading(false);
         },
         onError: (error) => {
@@ -59,6 +63,7 @@ const CreatePostInput = ({ list, setter }: any) => {
 
         <AutosizeTextarea
           maxHeight={256}
+          ref={textAreaRef}
           placeholder="Share your thoughts with the world!"
           className="resize-none rounded-none tracking-wide border-0 border-b border-gray-300 p-0 text-base focus-visible:border-gray-200 focus-visible:ring-0 focus-visible:ring-offset-0"
           value={content}

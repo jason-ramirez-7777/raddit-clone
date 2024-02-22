@@ -8,6 +8,10 @@ export interface IconProps {
   color?: string;
 }
 
+export interface LoaderProps {
+  size: number;
+}
+
 export interface User {
   id: string;
   name: string;

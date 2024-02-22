@@ -3,6 +3,7 @@ import { ClerkLoaded, ClerkLoading, ClerkProvider } from "@clerk/nextjs";
 import AuthProvider from "@/providers/AuthProvider";
 import { TRPCReactProvider } from "@/trpc/react";
 import "@/styles/globals.css";
+import { Loader2 } from "lucide-react";
 
 export const metadata = {
   title: "Create T3 App",
@@ -18,7 +19,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <ClerkProvider>
             <ClerkLoading>
               <div className="flex justify-center items-center w-full h-screen">
-                Loading...
+                <Loader2 size={64} className="text-primary animate-spin" />
               </div>
             </ClerkLoading>
 

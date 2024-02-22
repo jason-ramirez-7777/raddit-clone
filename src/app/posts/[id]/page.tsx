@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import React from "react";
 import { Separator } from "@/components/ui/separator";
 import PostDetail from "@/components/PostDetail";
@@ -10,29 +9,38 @@ import BackIcon from "@/components/icons/BackIcon";
 import SidebarWrapper from "@/providers/SidebarWrapper";
 import { PostType, QueryProps } from "@/lib/interface";
 import { api } from "@/trpc/react";
+import { useRouter } from "next/navigation";
+import { Loader } from "lucide-react";
 
 export default function PostPage(props: QueryProps) {
   const { id } = props.params;
   const { data: post }: any = api.post.get.useQuery({ id: Number(id) });
+  const router = useRouter();
+  const [isLoading, setIsLoading] = React.useState(true);
 
   const [postDetail, setPostDetail] = React.useState<PostType | undefined>(undefined);
 
   React.useEffect(() => {
     setPostDetail(post);
+    post && setIsLoading(false);
   }, [post]);
 
   return (
     <SidebarWrapper>
       {
-        (post === undefined || post?.error) ? (
+        isLoading ? (
+          <div className="flex justify-center w-full p-12">
+            <Loader size={48} className="text-dark animate-spin duration-1000" />
+          </div>
+        ) : (!postDetail || post?.error) ? (
           <h1 className="p-12 text-2xl">Post Not Found</h1>
         ) : (
           <div className="flex flex-col items-end w-full px-4 md:px-0 md:w-[600px]">
             <div className="w-full px-2 py-6">
-              <Link href={"/"} className="flex items-center hover:text-primary [&_path]:hover:stroke-primary">
+              <div onClick={() => router.back()} className="flex items-center cursor-pointer hover:text-primary [&_path]:hover:stroke-primary">
                 <BackIcon color="black" />
                 <p className="ml-4">Back to posts</p>
-              </Link>
+              </div>
             </div>
 
             <PostDetail {...postDetail} />
@@ -43,7 +51,7 @@ export default function PostPage(props: QueryProps) {
 
             <div className="w-full pb-16">
               {
-                postDetail.children && postDetail.children.length > 0 ? postDetail.children.map((comment: any) => (
+                postDetail && postDetail.children && postDetail.children.length > 0 ? postDetail.children.map((comment: any) => (
                   <Comment key={comment.id} {...comment} />
                 )) : (
                   <p className="w-full p-2 text-gray-400">No comments for this post</p>
