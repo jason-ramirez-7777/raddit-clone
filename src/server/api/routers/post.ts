@@ -38,7 +38,7 @@ export const postRouter = createTRPCRouter({
       parentId: z.number().optional()
     }))
     .mutation(async ({ ctx, input }) => {
-      return ctx.db.post.create({
+      const post = await ctx.db.post.create({
         data: {
           title: input.title,
           content: input.content,
@@ -47,6 +47,8 @@ export const postRouter = createTRPCRouter({
           parentId: input.parentId || null, // Assuming "parentId" is optional and can be null
         },
       });
+
+      return post;
     }),
 
   // Fetch all posts
@@ -58,7 +60,7 @@ export const postRouter = createTRPCRouter({
             parentId: null // Fetch only top-level posts
           }
         });
-        return posts;
+        return posts.reverse();
       } catch (error) {
         console.error("Error fetching posts:", error);
         return { error: "Internal server error" };

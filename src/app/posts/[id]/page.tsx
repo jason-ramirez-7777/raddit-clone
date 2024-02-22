@@ -8,12 +8,12 @@ import Comment from "@/components/Comment";
 import ReplyInput from "@/components/ReplyInput";
 import BackIcon from "@/components/icons/BackIcon";
 import SidebarWrapper from "@/providers/SidebarWrapper";
-import { CommentProps, PostProps, QueryProps } from "@/lib/interface";
-import { posts } from "@/lib/mockdata";
+import { CommentProps, QueryProps } from "@/lib/interface";
+import { api } from "@/trpc/react";
 
 export default function PostPage(props: QueryProps) {
   const { id } = props.params;
-  const post = posts.find((p: PostProps) => p.id === Number(id));
+  const { data: post }: any = api.post.get.useQuery({ id: Number(id) });
 
   return post ? (
     <SidebarWrapper>
@@ -32,9 +32,11 @@ export default function PostPage(props: QueryProps) {
         <Separator className="w-full h-[1px] bg-gray-200" />
 
         {
-          post.children && post.children.map((comment: CommentProps) => (
+          post.children && post.children.length > 0 ? post.children.map((comment: CommentProps) => (
             <Comment key={comment.id} {...comment} />
-          ))
+          )) : (
+            <p className="w-full p-2 text-gray-400">No comments for this post</p>
+          )
         }
       </div>
     </SidebarWrapper>

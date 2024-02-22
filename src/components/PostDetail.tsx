@@ -1,14 +1,17 @@
+"use client";
+
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import UpvoteIcon from "@/components/icons/UpvoteIcon";
 import DownvoteIcon from "@/components/icons/DownvoteIcon";
-import { PostProps, User } from "@/lib/interface";
-import { users } from "@/lib/mockdata";
+import { PostType } from "@/lib/interface";
 import { calculateAgeOfPost } from "@/lib/utils";
+import { api } from "@/trpc/react";
 
-const PostDetail = (props: PostProps) => {
-  const { id, title, content, votes, date } = props;
-  const user = users.find((user: User) => user.id === id);
+const PostDetail = (props: PostType) => {
+  const { title, content, votes, authorId, createdAt } = props;
+
+  const { data: user }: any = api.user.get.useQuery({ id: authorId });
 
   return (
     <div className="w-[600px]">
@@ -33,7 +36,7 @@ const PostDetail = (props: PostProps) => {
             </Avatar>
 
             <p className="ml-2 text-sm text-gray-700">
-              Posted by {user?.name} {calculateAgeOfPost(date)}
+              Posted by {user?.name} {calculateAgeOfPost(createdAt)}
             </p>
           </div>
 

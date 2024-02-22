@@ -5,11 +5,34 @@ import { useClerk } from "@clerk/nextjs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
+import { api } from "@/trpc/react";
 
-const CreatePostInput = () => {
+const CreatePostInput = ({ list, setter }: any) => {
   const [title, setTitle] = React.useState("");
   const [content, setContent] = React.useState("");
+
   const { user } = useClerk();
+  const mutation = api.post.create.useMutation();
+
+  const createPost = () => {
+    mutation.mutate(
+      {
+        title,
+        content,
+        authorId: user?.id || ""
+      },
+      {
+        onSuccess: (newPost) => {
+          setTitle("");
+          setContent("");
+          setter([newPost, ...list]);
+        },
+        onError: (error) => {
+          console.error("Mutation Error", error);
+        }
+      }
+    );
+  };
 
   return (
     <div className="flex w-full rounded-xl border border-[#E5E7EB] p-4 mb-2 shadow-md shadow-gray-100">
@@ -36,18 +59,11 @@ const CreatePostInput = () => {
         />
 
         <div className="flex w-full justify-end ">
-          <Button className="mt-2 rounded-lg px-4 py-2 text-sm text-white" onClick={() => createPost(null)}>Post</Button>
+          <Button className="mt-2 rounded-lg px-4 py-2 text-sm text-white" onClick={createPost}>Post</Button>
         </div>
       </div>
     </div>
   );
 };
-
-interface Post {
-  title: string;
-  content: string;
-}
-
-export async function createPost(newPost: any) {}
 
 export default CreatePostInput;

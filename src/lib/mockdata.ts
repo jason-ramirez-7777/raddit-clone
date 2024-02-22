@@ -1,4 +1,4 @@
-import { PostProps, User } from "./interface";
+import { PostType, User } from "./interface";
 
 export const users: User[] = [
   {
@@ -21,7 +21,7 @@ export const users: User[] = [
   },
 ];
 
-export const posts: PostProps[] = [
+export const posts: PostType[] = [
   {
     id: 1,
     title: "Honest opinions on Lime ebikes in London",

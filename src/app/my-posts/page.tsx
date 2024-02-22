@@ -1,18 +1,25 @@
+"use client";
+
 import React from "react";
 
+import CreatePostInput from "@/components/CreatePostInput";
 import Post from "@/components/Post";
-import { PostProps } from "@/lib/interface";
+import { PostType } from "@/lib/interface";
 import SidebarWrapper from "@/providers/SidebarWrapper";
+import { api } from "@/trpc/react";
+import { useClerk } from "@clerk/nextjs";
 
-import { api } from "@/trpc/server";
-import { posts } from "@/lib/mockdata";
+export default function MyPostsPage() {
+  const { user } = useClerk();
+  const { data: posts }: any = api.post.getAll.useQuery();
 
-export default async function MyPostsPage() {
   return (
     <SidebarWrapper>
       <div className="flex flex-col w-[600px] py-12">
+        <CreatePostInput />
+
         {
-          posts.map((post: PostProps) => (
+          posts && posts.filter((post: PostType) => post.authorId === user?.id).map((post: PostType) => (
             <Post key={post.id} {...post} />
           ))
         }

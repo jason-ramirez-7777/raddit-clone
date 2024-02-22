@@ -6,14 +6,15 @@ import { Separator } from "@/components/ui/separator";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import UpvoteIcon from "@/components/icons/UpvoteIcon";
 import DownvoteIcon from "@/components/icons/DownvoteIcon";
-import { PostProps, User } from "@/lib/interface";
+import { PostType } from "@/lib/interface";
 import { calculateAgeOfPost, sliceContent } from "@/lib/utils";
-import { users } from "@/lib/mockdata";
+import { api } from "@/trpc/react";
 
-const Post = (props: PostProps) => {
-  const { id, title, content, votes, authorId, date } = props;
-  const user = users.find((user: User) => user.id === authorId);
+const Post = (props: PostType) => {
+  const { id, title, content, votes, authorId, createdAt } = props;
   const router = useRouter();
+
+  const { data: user }: any = api.user.get.useQuery({ id: authorId });
 
   return (
     <div className="w-[600px]">
@@ -38,7 +39,7 @@ const Post = (props: PostProps) => {
             </Avatar>
 
             <p className="ml-2 text-sm text-gray-700">
-              Posted by {user?.name} {calculateAgeOfPost(date)}
+              Posted by {user?.name} {calculateAgeOfPost(createdAt)}
             </p>
           </div>
 

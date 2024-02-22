@@ -1,8 +1,8 @@
 import React from "react";
 import { ClerkLoaded, ClerkLoading, ClerkProvider } from "@clerk/nextjs";
-import { TRPCReactProvider } from "@/trpc/react";
+import StoreProvider from "@/providers/StoreProvider";
 import AuthProvider from "@/providers/AuthProvider";
-
+import { TRPCReactProvider } from "@/trpc/react";
 import "@/styles/globals.css";
 
 export const metadata = {
@@ -24,9 +24,11 @@ export default async function RootLayout({ children }: { children: React.ReactNo
             </ClerkLoading>
 
             <ClerkLoaded>
-              <AuthProvider>
-                {children}
-              </AuthProvider>
+              <StoreProvider>
+                <AuthProvider>
+                  {children}
+                </AuthProvider>
+              </StoreProvider>
             </ClerkLoaded>
           </ClerkProvider>
         </TRPCReactProvider>

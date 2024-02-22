@@ -17,14 +17,16 @@ export interface User {
   updatedAt: Date;
 }
 
-export interface PostProps {
+export interface PostType {
   id: number;
   title: string;
   content: string;
   votes: number;
-  authorId: number;
-  date: Date;
-  children: Array<CommentProps>;
+  authorId: string;
+  parentId?: string;
+  children?: Array<CommentProps>;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface CommentProps {
